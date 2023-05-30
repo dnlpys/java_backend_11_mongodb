@@ -14,4 +14,12 @@ public class MemoService {
 	public List<MemoVO> findAll(){
 		return dao.findAll();
 	}
+
+	public int insert(MemoVO vo) {
+		return dao.insert(vo);
+	}
+
+	public MemoVO findOne(MemoVO vo) {
+		return dao.findOne(vo);
+	}
 }

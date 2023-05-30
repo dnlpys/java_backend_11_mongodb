@@ -2,10 +2,14 @@ package test.com.member;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,13 +25,45 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 public class MemberRestController {
 	
+	@Autowired
+	MemberService service;
+	
 	@ResponseBody
 	@RequestMapping(value = "/findAll.do", method = RequestMethod.GET)
-	public String findAll() {
+	public List<MemberVO> findAll() {
 		log.info("/findAll.do");
+	
+		List<MemberVO> list = service.findAll();
 		
-		
-		return "home";
+		return list;
 	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/findOne.do", method = RequestMethod.GET)
+	public MemberVO findOne(MemberVO vo) {
+		log.info("/findOne.do....{}",vo);
+		
+		MemberVO vo2 = service.findOne(vo);
+		
+		return vo2;
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/insertOK.do", method = RequestMethod.GET)
+	public Map<String, Integer> insertOK(MemberVO vo) {
+		log.info("/insertOK.do...{}",vo);
+		
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		
+		int result = service.insert(vo);
+		
+		map.put("result", result);
+		
+		return map; //{"result":1}
+	}
+	
+	
 	
 }

@@ -15,4 +15,12 @@ public class MemberService {
 		return dao.findAll();
 	}
 	
+
+	public int insert(MemberVO vo) {
+		return dao.insert(vo);
+	}
+
+	public MemberVO findOne(MemberVO vo) {
+		return dao.findOne(vo);
+	}
 }
