@@ -40,6 +40,16 @@ public class MemberRestController {
 		return list;
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/searchList.do", method = RequestMethod.GET)
+	public List<MemberVO> searchList(String searchKey, String searchWord) {
+		log.info("/searchList.do....{},{}",searchKey,searchWord);
+		
+		List<MemberVO> list = service.searchList(searchKey,searchWord);
+		
+		return list;
+	}
+	
 	
 	
 	

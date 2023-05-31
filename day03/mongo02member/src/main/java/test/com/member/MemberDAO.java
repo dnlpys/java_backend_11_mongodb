@@ -10,6 +10,8 @@ public interface MemberDAO {
 
 	public int insert(MemberVO vo);
 
+	public List<MemberVO> searchList(String searchKey, String searchWord);
+
 	
 
 }

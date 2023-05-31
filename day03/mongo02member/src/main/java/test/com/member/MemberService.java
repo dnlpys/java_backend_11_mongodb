@@ -26,6 +26,11 @@ public class MemberService {
 	}
 
 
+	public List<MemberVO> searchList(String searchKey, String searchWord) {
+		return dao.searchList(searchKey, searchWord) ;
+	}
+
+
 
 
 	

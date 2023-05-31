@@ -78,14 +78,19 @@ public class MemberDAOimpl implements MemberDAO {
 //		Bson filter = new Document("num", vo.getNum());//번호검색
 //		FindIterable<Document> docs = member.find(filter);
 
-		// db.member.find({_id:1dsadadsadwr342f3})
-		Bson filter = new Document("_id", new ObjectId(vo.getMid()));//오브젝트아이디 검색
-		FindIterable<Document> docs = member.find(filter);
+		// db.member.find({_id:"1dsadadsadwr342f3"})
+//		Bson filter = new Document("_id", new ObjectId(vo.getMid()));//오브젝트아이디 검색
+//		FindIterable<Document> docs = member.find(filter);
 
 		// 번호검색 or 오브젝트아이디 검색
-//		Bson filters = Filters.or(Filters.eq("num", vo.getNum()),
-//				Filters.eq("_id", vo.getMid() == null ? "" : new ObjectId(vo.getMid()))); // 오브젝트아이디 널일때 빈문자로 대체
-//		FindIterable<Document> docs = member.find(filters);
+//		find({$or:[{num:1},{_id:"1dsadadsadwr342f3"}]})  
+		//where num=1 or _id='1dsadadsadwr342f3'
+		Bson filters = Filters.or(
+									Filters.eq("num", vo.getNum()),
+									Filters.eq("_id", 
+											vo.getMid()==null?"":new ObjectId(vo.getMid()))
+					   ); // 오브젝트아이디 널일때 빈문자로 대체
+		FindIterable<Document> docs = member.find(filters);
 
 		for (Document doc : docs) {
 			vo2.setMid(doc.get("_id").toString());
@@ -98,6 +103,32 @@ public class MemberDAOimpl implements MemberDAO {
 		}
 
 		return vo2;
+	}
+
+
+	@Override
+	public List<MemberVO> searchList(String searchKey, String searchWord) {
+		log.info("searchList()....{},{}",searchKey,searchWord);
+		List<MemberVO> list = new ArrayList<MemberVO>();
+
+		Bson sort = new Document("num", -1);//순정렬:1, 역정렬:-1
+		
+		//find({name:/im/}) where name like '%im%'
+		Bson filter = Filters.regex(searchKey, searchWord);
+		
+		FindIterable<Document> docs = member.find(filter).sort(sort);
+		for (Document doc : docs) {
+			MemberVO vo = new MemberVO();
+			vo.set_id(doc.get("_id").toString());
+			vo.setNum(doc.getInteger("num", 0));
+			vo.setId(doc.getString("id"));
+			vo.setPw(doc.getString("pw"));
+			vo.setName(doc.getString("name"));
+			vo.setTel(doc.getString("tel"));
+			list.add(vo);
+		}
+
+		return list;
 	}
 
 	

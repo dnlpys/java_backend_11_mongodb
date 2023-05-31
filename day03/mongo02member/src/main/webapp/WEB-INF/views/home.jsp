@@ -11,6 +11,10 @@
 	<hr>
 	<a href="findAll.do">findAll.do</a>
 	<hr>
+	<a href="searchList.do?searchKey=name&searchWord=im">searchList.do : name</a>
+	<a href="searchList.do?searchKey=tel&searchWord=7">searchList.do : tel</a>
+	<a href="searchList2.do?num1=3&num2=6">searchList2.do : Filters.and,or,in</a>
+	<hr>
 	<a href="findOne.do?num=1">findOne.do : num</a>
 	<a href="findOne.do?mid=6475895d1046e20cc70b8d8f">findOne.do : mid</a>
 	<hr>
