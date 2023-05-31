@@ -1,21 +1,14 @@
 package test.com.member;
 
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.bson.Document;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.slf4j.Slf4j;
@@ -41,11 +34,41 @@ public class MemberRestController {
 	}
 	
 	@ResponseBody
+	@RequestMapping(value = "/findAll2.do", method = RequestMethod.GET)
+	public List<MemberVO> findAll2(int page, int limit) {
+		log.info("/findAll2.do...{},{}",page,limit);
+		
+		List<MemberVO> list = service.findAll2(page,limit);
+		
+		return list;
+	}
+	
+	@ResponseBody
 	@RequestMapping(value = "/searchList.do", method = RequestMethod.GET)
 	public List<MemberVO> searchList(String searchKey, String searchWord) {
 		log.info("/searchList.do....{},{}",searchKey,searchWord);
 		
 		List<MemberVO> list = service.searchList(searchKey,searchWord);
+		
+		return list;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/searchList2.do", method = RequestMethod.GET)
+	public List<MemberVO> searchList2(int num1,int num2) {
+		log.info("/searchList2.do....{},{}",num1,num2);
+		
+		List<MemberVO> list = service.searchList2(num1,num2);
+		
+		return list;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/searchList3.do", method = RequestMethod.GET)
+	public List<Document> searchList3(int num1,int num2) {
+		log.info("/searchList3.do....{},{}",num1,num2);
+		
+		List<Document> list = service.searchList3(num1,num2);
 		
 		return list;
 	}
@@ -71,6 +94,21 @@ public class MemberRestController {
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		
 		int result = service.insert(vo);
+		
+		map.put("result", result);
+		
+		return map; //{"result":1}
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/updateOK.do", method = RequestMethod.GET)
+	public Map<String, Integer> updateOK(MemberVO vo) {
+		log.info("/updateOK.do...{}",vo);
+		
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		
+		int result = service.update(vo);
 		
 		map.put("result", result);
 		

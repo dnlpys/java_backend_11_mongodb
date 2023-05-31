@@ -31,6 +31,25 @@ public class MemberService {
 	}
 
 
+	public List<MemberVO> searchList2(int num1, int num2) {
+		return dao.searchList2(num1, num2);
+	}
+
+	public List<Document> searchList3(int num1, int num2) {
+		return dao.searchList3(num1, num2);
+	}
+
+
+	public List<MemberVO> findAll2(int page, int limit) {
+		return dao.findAll2(page, limit);
+	}
+
+
+	public int update(MemberVO vo) {
+		return dao.update(vo);
+	}
+	
+
 
 
 	

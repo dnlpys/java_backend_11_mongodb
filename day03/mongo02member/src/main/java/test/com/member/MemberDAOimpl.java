@@ -131,6 +131,101 @@ public class MemberDAOimpl implements MemberDAO {
 		return list;
 	}
 
+
+	@Override
+	public List<MemberVO> searchList2(int num1, int num2) {
+		log.info("searchList2()...{},{}",num1,num2);
+		List<MemberVO> list = new ArrayList<MemberVO>();
+
+		Bson sort = new Document("num", -1);//순정렬:1, 역정렬:-1
+		
+		//find({$or:[{num:3},{num:6}]})  where num=3 or num=6
+//		Bson filter = Filters.or(Filters.eq("num", num1), Filters.eq("num", num2));
+		
+		//find({num:{$in:[3,6]}})   where num in(3,6)  
+//		Bson filter = Filters.in("num",num1,num2);
+		
+		//find({$and:[{num:3},{num:6}]})  where num>=3 and num<=6
+		//find({num:{$gte:3,$lte:6}})
+		Bson filter = Filters.and(Filters.gte("num", num1), Filters.lte("num", num2));
+		
+		FindIterable<Document> docs = member.find(filter).sort(sort);
+		for (Document doc : docs) {
+			MemberVO vo = new MemberVO();
+			vo.set_id(doc.get("_id").toString());
+			vo.setNum(doc.getInteger("num", 0));
+			vo.setId(doc.getString("id"));
+			vo.setPw(doc.getString("pw"));
+			vo.setName(doc.getString("name"));
+			vo.setTel(doc.getString("tel"));
+			list.add(vo);
+		}
+
+		return list;
+	}
+	
+	@Override
+	public List<Document> searchList3(int num1, int num2) {
+		log.info("searchList3()...{},{}",num1,num2);
+		List<Document> list = new ArrayList<Document>();
+		
+		Bson sort = new Document("num", -1);//순정렬:1, 역정렬:-1
+		
+		Bson filter = Filters.and(Filters.gte("num", num1), Filters.lte("num", num2));
+		
+		FindIterable<Document> docs = member.find(filter).sort(sort);
+		for (Document doc : docs) {
+			log.info("{}",doc);
+			list.add(doc);
+		}
+		
+		return list;
+	}
+
+
+	@Override
+	public List<MemberVO> findAll2(int page, int limit) {
+		log.info("findAll2()...{},{}",page,limit);
+		List<MemberVO> list = new ArrayList<MemberVO>();
+
+		Bson sort = new Document("num", -1);//순정렬:1, 역정렬:-1
+		
+		FindIterable<Document> docs = member.find().sort(sort).skip((page-1)*limit).limit(limit);
+		for (Document doc : docs) {
+			MemberVO vo = new MemberVO();
+			vo.set_id(doc.get("_id").toString());
+			vo.setNum(doc.getInteger("num", 0));
+			vo.setId(doc.getString("id"));
+			vo.setPw(doc.getString("pw"));
+			vo.setName(doc.getString("name"));
+			vo.setTel(doc.getString("tel"));
+			list.add(vo);
+		}
+
+		return list;
+	}
+
+
+	@Override
+	public int update(MemberVO vo) {
+		log.info("update()....{}", vo);
+		int flag = 0;
+
+		try {
+			Bson filter = new Document("num",vo.getNum());
+			
+			//1.단일 필드 수정
+			Bson b1 = Updates.set("pw", vo.getPw());
+			
+			member.updateOne(filter,b1);
+			flag = 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return flag;
+	}
+
 	
 
 }
